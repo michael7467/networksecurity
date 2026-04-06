@@ -1,6 +1,0 @@
-[2026-04-05 23:54:43,727] 24 root - INFO - >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Data Ingestion <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-[2026-04-05 23:54:43,728] 14 root - INFO - Starting data ingestion
-[2026-04-05 23:54:43,891] 96 pymongo.serverSelection - INFO - {"message": "Waiting for suitable server to become available", "selector": "Primary()", "operation": "count", "topologyDescription": "<TopologyDescription id: 69d2da235eb9e01485e1ea00, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('ac-o2cvprl-shard-00-00.qqtbh5i.mongodb.net', 27017) server_type: Unknown, rtt: None>, <ServerDescription ('ac-o2cvprl-shard-00-01.qqtbh5i.mongodb.net', 27017) server_type: Unknown, rtt: None>, <ServerDescription ('ac-o2cvprl-shard-00-02.qqtbh5i.mongodb.net', 27017) server_type: Unknown, rtt: None>]>", "clientId": {"$oid": "69d2da235eb9e01485e1ea00"}, "remainingTimeMS": 30}
-[2026-04-05 23:54:46,374] 72 root - INFO - Performed train test split on the dataframe
-[2026-04-05 23:54:46,374] 73 root - INFO - Exited the split_data_as_train_test method of DataIngestion class
-[2026-04-05 23:54:46,375] 76 root - INFO - Exporting training data to file: artifact\04-05-2026-23-54-42\data_ingestion\ingested\train.csv

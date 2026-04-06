@@ -34,12 +34,8 @@ class DataIngestion:
             database_name = self.data_ingestion_config.database_name
             collection_name = self.data_ingestion_config.collection_name
             self.mongo_client = pymongo.MongoClient(MONGO_DB_URL)
-            print(f"Connected to MongoDB at {MONGO_DB_URL}")
-            print(f"Accessing database: {database_name}, collection: {collection_name}")
             collection = self.mongo_client[database_name][collection_name]
-            print("Number of documents in collection:", collection.count_documents({}))
             df=pd.DataFrame(list(collection.find()))
-            print(f"Exported data from MongoDB to DataFrame with shape: {df.shape}")
             if "_id" in df.columns.to_list():
                 df.drop(columns=["_id"], axis=1, inplace=True)
            
