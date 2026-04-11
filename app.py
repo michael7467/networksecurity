@@ -83,6 +83,6 @@ async def predict(request:Request,file: UploadFile = File(...)):
        
     except Exception as e:
         raise NetworkSecurityException(e, sys) from e
-
+#please run the app using the command: uvicorn app:app --host
 if __name__=="__main__":
     app_run(app, host="0.0.0.0", port=8000)
