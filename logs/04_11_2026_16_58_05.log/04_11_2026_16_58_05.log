@@ -1,0 +1,8 @@
+[2026-04-11 16:58:13,398] 1025 httpx - INFO - HTTP Request: GET https://dagshub.com/api/v1/user "HTTP/1.1 200 OK"
+[2026-04-11 16:58:13,415] 107 dagshub - INFO - Accessing as michael7467
+[2026-04-11 16:58:13,799] 1025 httpx - INFO - HTTP Request: GET https://dagshub.com/api/v1/repos/michael7467/networksecurity "HTTP/1.1 200 OK"
+[2026-04-11 16:58:14,271] 1025 httpx - INFO - HTTP Request: GET https://dagshub.com/api/v1/user "HTTP/1.1 200 OK"
+[2026-04-11 16:58:14,275] 107 dagshub - INFO - Initialized MLflow to track repo "michael7467/networksecurity"
+[2026-04-11 16:58:14,277] 107 dagshub - INFO - Repository michael7467/networksecurity initialized!
+[2026-04-11 16:58:26,699] 54 root - INFO - Entered the load_object method of MainUtils class
+[2026-04-11 16:58:26,703] 54 root - INFO - Entered the load_object method of MainUtils class
