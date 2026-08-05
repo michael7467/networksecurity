@@ -51,4 +51,4 @@ python main.py        # run the training pipeline
 python app.py          # start the API server (http://localhost:8080)
 ```
 
-Requires a `.env` file with a `MONGODB_URL_KEY` variable pointing to your MongoDB Atlas connection string.
+Requires a `.env` file with a `MONGO_DB_URL` variable pointing to your MongoDB Atlas connection string.

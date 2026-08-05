@@ -16,6 +16,7 @@ from networksecurity.utils.ml_utils.metric.classification_metric import get_clas
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import roc_auc_score, confusion_matrix
 from sklearn.ensemble import (
     AdaBoostClassifier,
     GradientBoostingClassifier,
@@ -64,25 +65,37 @@ class ModelTrainer:
         except Exception as e:
             raise NetworkSecurityException(e, sys)
 
-    def track_mlflow(self, best_model, classification_train_metric):
+    def track_mlflow(self, best_model, classification_metric, X, y_true, y_pred):
         with mlflow.start_run():
-            f1_score = classification_train_metric.f1_score
-            precision_score = classification_train_metric.precision_score
-            recall_score = classification_train_metric.recall_score
+            f1_score = classification_metric.f1_score
+            precision_score = classification_metric.precision_score
+            recall_score = classification_metric.recall_score
 
             mlflow.log_metric("f1_score", f1_score)
             mlflow.log_metric("precision_score", precision_score)
             mlflow.log_metric("recall_score", recall_score)
+
+            # ROC-AUC needs predicted probabilities for the positive class, not hard 0/1 predictions
+            if hasattr(best_model, "predict_proba"):
+                y_score = best_model.predict_proba(X)[:, 1]
+                mlflow.log_metric("roc_auc", roc_auc_score(y_true, y_score))
+
+            tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
+            mlflow.log_metric("true_negatives", tn)
+            mlflow.log_metric("false_positives", fp)
+            mlflow.log_metric("false_negatives", fn)
+            mlflow.log_metric("true_positives", tp)
+
             mlflow.sklearn.log_model(best_model, "model")
 
     def train_model(self, X_train, y_train, X_test, y_test):
         init_dagshub()
 
         models = {
-            "Random Forest": RandomForestClassifier(verbose=1),
-            "Decision Tree": DecisionTreeClassifier(),
+            "Random Forest": RandomForestClassifier(verbose=1, class_weight="balanced"),
+            "Decision Tree": DecisionTreeClassifier(class_weight="balanced"),
             "Gradient Boosting": GradientBoostingClassifier(verbose=1),
-            "Logistic Regression": LogisticRegression(verbose=1),
+            "Logistic Regression": LogisticRegression(verbose=1, class_weight="balanced"),
             "AdaBoost": AdaBoostClassifier(),
         }
 
@@ -121,11 +134,11 @@ class ModelTrainer:
         y_train_pred = best_model.predict(X_train)
         classification_train_metric = get_classification_score(y_true=y_train, y_pred=y_train_pred)
 
-        self.track_mlflow(best_model, classification_train_metric)
+        self.track_mlflow(best_model, classification_train_metric, X_train, y_train, y_train_pred)
 
         y_test_pred = best_model.predict(X_test)
         classification_test_metric = get_classification_score(y_true=y_test, y_pred=y_test_pred)
-        self.track_mlflow(best_model, classification_test_metric)
+        self.track_mlflow(best_model, classification_test_metric, X_test, y_test, y_test_pred)
 
         preprocessor = load_object(file_path=self.data_transformation_artifact.transformed_object_file_path)
 

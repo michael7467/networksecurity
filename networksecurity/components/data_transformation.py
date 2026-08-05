@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 from sklearn.impute import KNNImputer
 from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import RobustScaler
 
 from networksecurity.constants.training_pipeline import TARGET_COLUMN
 from networksecurity.constants.training_pipeline import DATA_TRANSFORMATION_IMPUTER_PARAMS
@@ -39,8 +40,10 @@ class DataTransformation:
     def get_data_transformer_object(self) -> Pipeline:
         try:
             imputer: KNNImputer = KNNImputer(**DATA_TRANSFORMATION_IMPUTER_PARAMS)
+            scaler: RobustScaler = RobustScaler()
             preprocessing_obj: Pipeline = Pipeline(steps=[
-                ("imputer", imputer)
+                ("imputer", imputer),
+                ("scaler", scaler),
             ])
             return preprocessing_obj
         except Exception as e:
@@ -61,7 +64,7 @@ class DataTransformation:
             target_feature_test_df = test_df[TARGET_COLUMN]
             target_feature_test_df = target_feature_test_df.replace(-1, 0)
 
-            logging.info(f"Applying KNN Imputer to impute missing values in training and testing dataframe.")
+            logging.info(f"Applying KNN Imputer and RobustScaler to training and testing dataframe.")
             preprocessor = self.get_data_transformer_object()
             preprocessor_object = preprocessor.fit(input_feature_train_df)
             transforremd_input_train_feature = preprocessor_object.transform(input_feature_train_df)

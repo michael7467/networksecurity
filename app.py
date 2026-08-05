@@ -9,8 +9,7 @@ ca=certifi.where()
 
 from dotenv import load_dotenv
 load_dotenv()
-mongodb_url=os.getenv("MONGODB_URL_KEY")
-print(mongodb_url)
+mongodb_url=os.getenv("MONGO_DB_URL")
 
 import pymongo
 
